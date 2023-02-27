@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
   <head>
     <meta charset="utf-8" />
 
-    <title>reveal.js – The HTML Presentation Framework</title>
+    <title>Prog I · Uenp Steam</title>
+    <link rel="icon" type="image/svg" href="./public/favicon.svg" />
 
     <meta
       name="description"
-      content="A framework for easily creating beautiful presentations using HTML"
+      content="Apresentation for final work in Prog I at UENP - created with Reveal.js"
     />
-    <meta name="author" content="Hakim El Hattab" />
+    <meta name="author" content="Henrique GC" />
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <link rel="stylesheet" href="dist/reset.css" />
@@ -30,87 +30,633 @@
   <body>
     <div class="reveal">
       <div class="slides">
+        <!--Data struct-->
         <section data-auto-animate>
-          <h2 data-id="code-title">Pretty Code</h2>
-          <pre
-            data-id="code-animation"
-          ><code class="hljs javascript" data-trim data-line-numbers>
-						import React, { useState } from 'react';
-
-						function Example() {
-						  const [count, setCount] = useState(0);
-
-						  return (
-						    ...
-						  );
-						}
-					</code></pre>
-          <p>
-            Code syntax highlighting courtesy of
-            <a href="https://highlightjs.org/usage/">highlight.js</a>.
-          </p>
+          <p>Estrutura de dado - Jogo</p>
+          <pre data-id="code-animation">
+            <code class="hljs c" data-trim data-line-numbers>
+              <script type="text/template">
+                struct Game {
+                  char name[20];
+                  char platform[30];
+                  char type[30];
+                  float price;
+                  float rating;
+                  int year;
+                  char producer[30];
+                  int classification;
+                };
+              </script>
+					  </code>
+          </pre>
         </section>
 
+        <!--Function 1: Create Register-->
         <section data-auto-animate>
-          <h2 data-id="code-title">With Animations</h2>
-          <pre
-            data-id="code-animation"
-          ><code class="hljs javascript" data-trim data-line-numbers="|4,8-11|17|22-24"><script type="text/template">
-						import React, { useState } from 'react';
+          <h3 data-id="code-title">Funções</h3>
+          <p>Criar Registro</p>
+          <pre data-id="code-animation">
+            <code class="hljs c" 
+              data-trim data-line-numbers="1|2-8|10-18|41|43"
+            >
+              <script type="text/template">
+                int createRegister(FILE *f, char *filename) {
+                  f = fopen(filename, "ab");
 
-						function Example() {
-						  const [count, setCount] = useState(0);
+                  if (f == NULL) {
+                    printf("arquivo não pode ser aberto... encerrando\n");
 
-						  return (
-						    <div>
-						      <p>You clicked {count} times</p>
-						      <button onClick={() => setCount(count + 1)}>
-						        Click me
-						      </button>
-						    </div>
-						  );
-						}
+                    return 2;
+                  }
 
-						function SecondExample() {
-						  const [count, setCount] = useState(0);
+                  struct Game g;
 
-						  return (
-						    <div>
-						      <p>You clicked {count} times</p>
-						      <button onClick={() => setCount(count + 1)}>
-						        Click me
-						      </button>
-						    </div>
-						  );
-						}
-					</script></code></pre>
+                  printf("******************************\n");
+                  printf("*** CADASTRAR UM NOVO JOGO ***\n");
+                  printf("******************************\n\n");
+
+                  setbuf(stdin, 0);
+                  printf("nome: ");
+                  fgets(g.name, sizeof(g.name), stdin);
+
+                  printf("tipo: ");
+                  fgets(g.type, sizeof(g.type), stdin);
+
+                  printf("plataforma: ");
+                  fgets(g.platform, sizeof(g.platform), stdin);
+
+                  printf("produtora: ");
+                  fgets(g.producer, sizeof(g.producer), stdin);
+
+                  printf("ano: ");
+                  scanf("%d", &g.year);
+
+                  printf("preço: ");
+                  scanf("%f", &g.price);
+
+                  printf("rating: ");
+                  scanf("%f", &g.rating);
+
+                  printf("atual classification: ");
+                  scanf("%d", &g.classification);
+
+                  fwrite(g, sizeof(struct Game), 1, f);
+
+                  fclose(f);
+
+                  return 0;
+                }
+              </script>
+            </code>
+          </pre>
+        </section>
+
+        <!--Function 2: Ler todos os registros-->
+        <section data-auto-animate>
+          <h3 data-id="code-title">Funções</h3>
+          <p>Ler Todos os Registro</p>
+          <pre data-id="code-animation">
+            <code class="hljs c" 
+              data-trim data-line-numbers="1|2-8|10-16|17-26|29"
+            >
+              <script type="text/template">
+                int readAllRegisters(FILE *f, char *filename) {
+                  f = fopen(filename, "rb");
+
+                  if (f == NULL) {
+                    printf("arquivo nao pode ser aberto... encerrando\n");
+
+                    return 3;
+                  }
+
+                  printf("******************************\n");
+                  printf("**** LISTAR TODOS OS JOGOS****\n");
+                  printf("******************************\n\n");
+
+                  struct Game data;
+
+                  while (fread(&data, sizeof(struct Game), 1, f)) {
+                    printf("nome: %s", data.name);
+                    printf("plataforma: %s", data.platform);
+                    printf("tipo: %s", data.type);
+                    printf("produtora: %s", data.producer);
+                    printf("preço: %f\n", data.price);
+                    printf("rating: %f\n", data.rating);
+                    printf("ano: %d\n", data.year);
+                    printf("classificação: %d\n", data.classification);
+
+                    printf("\n");
+                  }
+
+                  fclose(f);
+
+                  return 0;
+                }
+              </script>
+            </code>
+          </pre>
+        </section>
+
+        <!--Function 3: Ler um dos registros-->
+        <section>
+          <section data-auto-animate>
+            <h3 data-id="code-title">Funções</h3>
+            <p>Ler Um dos Registros</p>
+            <pre data-id="code-animation">
+              <code class="hljs c" 
+                data-trim data-line-numbers="1|2-8|10-19|21-25"
+              >
+                <script type="text/template">
+                  int readOneRegister(FILE *f, char *filename) {
+                    f = fopen(filename, "rb");
+                    
+                    if (f == NULL) {
+                      printf("arquivo não pode ser aberto.. encerrando\n");
+  
+                      return 4;
+                    }
+  
+                    printf("******************************\n");
+                    printf("***** LISTAR UM DOS JOGOS*****\n");
+                    printf("******************************\n\n");
+  
+                    struct Game data;
+                    char gameName[sizeof(data.name)];
+  
+                    setbuf(stdin, 0);
+                    printf("Digite o nome que deseja procurar: ");
+                    fgets(gameName, sizeof(gameName), stdin);
+  
+                    int is_register = verify_register(data, gameName, f);
+  
+                    if (!is_register) {
+                      printf("registro não encontrado...\n");
+                    }
+  
+                    fclose(f);
+  
+                    return 0;
+                  }
+                </script>
+              </code>
+            </pre>
+          </section>
+
+          <!--Funcão 3: regra de negócio-->
+          <section data-auto-animate>
+            <h3 data-id="code-title">Ler um Registro</h3>
+            <p>Regra de Negócio</p>
+            <pre data-id="code-animation">
+              <code class="hljs c" 
+                data-trim data-line-numbers="1|2|3-14|16"
+              >
+                <script type="text/template">
+                 int verify_register(struct Game data, char *game, FILE *f) {
+                  while (fread(&data, sizeof(struct Game), 1, f)) {
+                    if (!strcmp(data.name, game)) {
+                      printf("nome: %s", data.name);
+                      printf("plataforma: %s", data.platform);
+                      printf("tipo: %s", data.type);
+                      printf("produtora: %s", data.producer);
+                      printf("preço: %f\n", data.price);
+                      printf("rating: %f\n", data.rating);
+                      printf("ano: %d\n", data.year);
+                      printf("classificação: %d\n", data.classification);
+
+                      return 1;
+                    }
+                  
+                    return 0;
+                  }
+                </script>
+              </code>
+            </pre>
+          </section>
+        </section>
+
+        <!--Function 4: Modificar um dos registros-->
+        <section>
+          <section data-auto-animate>
+            <h3 data-id="code-title">Funções</h3>
+            <p>Modificar Um dos Registros</p>
+            <pre data-id="code-animation">
+              <code class="hljs c" 
+                data-trim data-line-numbers="1|2-8|10-19|21-25"
+              >
+                <script type="text/template">
+                  int modifyOneRegister(FILE *f, char *filename) {
+                    f = fopen(filename, "rb+");
+
+                    if (f == NULL) {
+                      printf("arquivo não pode ser aberto.. encerrando\n");
+
+                      return 5;
+                    }
+
+                    printf("******************************\n");
+                    printf("*** MODIFICAR UM DOS JOGOS ***\n");
+                    printf("******************************\n\n");
+
+                    struct Game data;
+                    char gameName[sizeof(data.name)];
+
+                    setbuf(stdin, 0);
+                    printf("Digite o nome que deseja procurar: ");
+                    fgets(gameName, sizeof(gameName), stdin);
+
+                    int is_register = verify_register_to_update(data, gameName, f);
+
+                    if (!is_register) {
+                      printf("registro não encontrado...\n");
+                    }
+
+                    fclose(f);
+
+                    return 0;
+                  }
+                </script>
+              </code>
+            </pre>
+          </section>
+
+          <!--Funcão 4: regra de negócio-->
+          <section data-auto-animate>
+            <h3 data-id="code-title">Modificar um Registro</h3>
+            <p>Regra de Negócio</p>
+            <pre data-id="code-animation">
+              <code class="hljs c" 
+                data-trim data-line-numbers="1|2-10|12-19|23|24|26-29|31-42|95-104|148|149|153|157"
+              >
+                <script type="text/template">
+                  int verify_register_to_update(struct Game data, char *game, FILE *f) {
+                    // confirmation - 0 or 1
+                    int modifyName;
+                    int modifyProducer;
+                    int modifyPlataform;
+                    int modifyType;
+                    int modifyYear;
+                    int modifyPrice;
+                    int modifyRating;
+                    int modifyClassification;
+
+                    char newName[sizeof(data.name)];
+                    char newProducer[sizeof(data.producer)];
+                    char newPlataform[sizeof(data.platform)];
+                    char newType[sizeof(data.type)];
+                    int newYear;
+                    float newPrice;
+                    float newRating;
+                    int newClassification;
+
+                    int registerCount = 0;
+
+                    while (fread(&data, sizeof(struct Game), 1, f)) {
+                      long int pos = ftell(f);
+
+                      if (!strcmp(data.name, game)) {
+                        registerCount++;
+
+                        printf("\nalterando registro [%d]\n", registerCount);
+
+                        printf("Deseja alterar o nome? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyName);
+
+                        if (modifyName) {
+                          setbuf(stdin, 0);
+                          printf("Digite o novo nome: ");
+                          fgets(newName, sizeof(newName), stdin);
+
+                          for (int i = 0; i < sizeof(data.name); i++) {
+                            data.name[i] = newName[i];
+                          }
+                        }
+
+                        setbuf(stdin, 0);
+                        printf("\n");
+
+                        printf("Deseja alterar a produtora? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyProducer);
+
+                        if (modifyProducer) {
+                          setbuf(stdin, 0);
+                          printf("Digite a nova produtora: ");
+                          fgets(newProducer, sizeof(newProducer), stdin);
+
+                          for (int i = 0; i < sizeof(data.producer); i++) {
+                            data.producer[i] = newProducer[i];
+                          }
+                        }
+
+                        setbuf(stdin, 0);
+                        printf("\n");
+
+                        printf("Deseja alterar a plataforma? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyPlataform);
+
+                        if (modifyPlataform) {
+                          setbuf(stdin, 0);
+                          printf("Digite a nova plataforma: ");
+                          fgets(newPlataform, sizeof(newPlataform), stdin);
+
+                          for (int i = 0; i < sizeof(data.platform); i++) {
+                            data.platform[i] = newPlataform[i];
+                          }
+                        }
+
+                        setbuf(stdin, 0);
+                        printf("\n");
+
+                        printf("Deseja alterar o tipo? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyType);
+
+                        if (modifyType) {
+                          setbuf(stdin, 0);
+                          printf("Digite o novo tipo: ");
+                          fgets(newType, sizeof(newType), stdin);
+
+                          for (int i = 0; i < sizeof(data.type); i++) {
+                            data.type[i] = newType[i];
+                          }
+                        }
+
+                        setbuf(stdin, 0);
+                        printf("\n");
+
+                        printf("Deseja alterar o ano? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyYear);
+
+                        if (modifyYear) {
+                          setbuf(stdin, 0);
+                          printf("Digite o novo ano: ");
+                          scanf("%d", &newYear);
+
+                          data.year = newYear;
+                        }
+
+                        setbuf(stdin, 0);
+                        printf("\n");
+
+                        printf("Deseja alterar o preço? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyPrice);
+
+                        if (modifyPrice) {
+                          setbuf(stdin, 0);
+                          printf("Digite o novo preço: ");
+                          scanf("%f", &newPrice);
+
+                          data.price = newPrice;
+                        }
+
+                        setbuf(stdin, 0);
+                        printf("\n");
+
+                        printf("Deseja alterar a classificação? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyClassification);
+
+                        if (modifyClassification) {
+                          setbuf(stdin, 0);
+                          printf("Digite a nova classificação: ");
+                          scanf("%d", &newClassification);
+
+                          data.classification = newClassification;
+                        }
+
+                        setbuf(stdin, 0);
+                        printf("\n");
+
+                        printf("Deseja alterar o rating? [1 - yes / 0 - no]: ");
+                        scanf("%d", &modifyRating);
+
+                        if (modifyRating) {
+                          setbuf(stdin, 0);
+                          printf("Digite o novo rating: ");
+                          scanf("%f", &newRating);
+
+                          data.rating = newRating;
+                        }
+
+                        fseek(f, pos - sizeof(struct Game), SEEK_SET);
+                        fwrite(&data, sizeof(struct Game), 1, f);
+
+                        printf("registro alterado com sucesso!\n");
+
+                        return 1;
+                      }
+                    }
+
+                    return 0;
+                  }
+                </script>
+              </code>
+            </pre>
+          </section>
+        </section>
+
+        <!--Function 5: Remover um dos registros-->
+        <section data-auto-animate>
+          <h3 data-id="code-title">Funções</h3>
+          <p>Remover Um dos Registro</p>
+          <pre data-id="code-animation">
+            <code class="hljs c" 
+              data-trim data-line-numbers="1-6|8-18|20-29|31-43|45-54|56-62|64-65|67-68"
+            >
+              <script type="text/template">
+                int deleteOneRegister(FILE *f, char *filename) {
+                  f = fopen(filename, "rb+");
+
+                  remove("swapDatabase.bin");
+                  char *swapFilename = "swapDatabase.bin";
+                  FILE *swapF = fopen(swapFilename, "ab");
+
+                  if (swapF == NULL) {
+                    printf("arquivo de troca não pode ser aberto.. encerrando\n");
+
+                    return 5;
+                  }
+
+                  if (f == NULL) {
+                    printf("arquivo não pode ser aberto.. encerrando\n");
+
+                    return 5;
+                  }
+
+                  struct Game game;
+                  char gameName[sizeof(game.name)];
+
+                  printf("******************************\n");
+                  printf("**** DELETAR UM DOS JOGOS ****\n");
+                  printf("******************************\n\n");
+
+                  setbuf(stdin, 0);
+                  printf("Digite o nome que deseja procurar: ");
+                  fgets(gameName, sizeof(gameName), stdin);
+
+                  int found = 0;
+
+                  while (fread(&game, sizeof(struct Game), 1, f)) {
+                    if (!strcmp(game.name, gameName)) {
+                      found = 1;
+                    }
+                  }
+
+                  if (!found) {
+                    printf("registro não encontrado... encerrando\n");
+
+                    return 1;
+                  }
+
+                  int confirmation = 0;
+
+                  printf("deseja mesmo remover o registro? [1 - yes / 0 - no]: ");
+                  scanf("%d", &confirmation);
+
+                  if (!confirmation) {
+                    printf("registro não removido com sucesso!\n");
+
+                    return 0;
+                  }
+
+                  while (fread(&game, sizeof(struct Game), 1, f)) {
+                    if (strcmp(game.name, gameName)) {
+                      fwrite(&game, sizeof(struct Game), 1, swapF);
+                    }
+                  }
+
+                  printf("registro removido com sucesso!\n");
+
+                  fclose(f);
+                  fclose(swapF);
+
+                  remove(filename);
+                  rename(swapFilename, filename);
+
+                  return 0;
+                }
+              </script>
+            </code>
+          </pre>
+        </section>
+
+        <!--Main: Lógica-->
+        <section data-auto-animate>
+          <p>Lógica da aplicação</p>
+          <pre data-id="code-animation">
+            <code class="hljs c" 
+              data-trim data-line-numbers="2-8|10-11|13-18|20|21|23-30|32-42|77-81|83|20|86"
+            >
+              <script type="text/template">
+                int main(int argc, char **argv) {
+                  char *filename = argv[1];
+
+                  if (filename == NULL) {
+                    printf("database não foi fornecida... encerrando\n");
+
+                    return 1;
+                  }
+
+                  FILE *fptr_i;
+                  FILE *fptr;
+
+                  int userContinue = 1;
+                  int userCreateRegister = 0;
+                  int userListAllRegisters = 0;
+                  int userListOneRegister = 0;
+                  int userUpdateOneRegister = 0;
+                  int userDeleteOneRegister = 0;
+
+                  while (userContinue != 0) {
+                    greeting(fptr_i, "image.txt");
+
+                    printf("deseja criar um usuário? [1 - y / 0 - no]: ");
+                    scanf("%d", &userCreateRegister);
+
+                    if (userCreateRegister) {
+                      clearScreen();
+
+                      createRegister(fptr, filename);
+                    }
+
+                    setbuf(stdin, 0);
+                    printf("\n");
+
+                    printf("deseja listar todos os usuários? [1 - y / 0 - no]: ");
+                    scanf("%d", &userListAllRegisters);
+
+                    if (userListAllRegisters) {
+                      clearScreen();
+
+                      readAllRegisters(fptr, filename);
+                    }
+
+                    setbuf(stdin, 0);
+                    printf("\n");
+
+                    printf("deseja listar um usuário? [1 - y / 0 - no]: ");
+                    scanf("%d", &userListOneRegister);
+
+                    if (userListOneRegister) {
+                      clearScreen();
+                      readOneRegister(fptr, filename);
+                    }
+
+                    setbuf(stdin, 0);
+                    printf("\n");
+
+                    printf("deseja atualizar um usuário? [1 - y / 0 - no]: ");
+                    scanf("%d", &userUpdateOneRegister);
+
+                    if (userUpdateOneRegister) {
+                      clearScreen();
+                      modifyOneRegister(fptr, filename);
+                    }
+
+                    setbuf(stdin, 0);
+                    printf("\n");
+
+                    printf("deseja remover um usuário? [1 - y / 0 - no]: ");
+                    scanf("%d", &userDeleteOneRegister);
+
+                    if (userDeleteOneRegister) {
+                      clearScreen();
+                      deleteOneRegister(fptr, filename);
+                    }
+
+                    setbuf(stdin, 0);
+                    printf("\n");
+
+                    printf("deseja continuar no programa? [1 - y / 0 - no]: ");
+                    scanf("%d", &userContinue);
+
+                    clearScreen();
+                  }
+
+                  return 0;
+                }
+              </script>
+            </code>
+          </pre>
+        </section>
+
+        <!--Video example-->
+        <section>
+          <h3 data-id="code-title">Exemplo</h3>
+          <video controls src="./public/video_example.mp4"></video>
         </section>
       </div>
     </div>
 
     <script src="dist/reveal.js"></script>
-    <script src="plugin/zoom/zoom.js"></script>
-    <script src="plugin/notes/notes.js"></script>
-    <script src="plugin/search/search.js"></script>
-    <script src="plugin/markdown/markdown.js"></script>
     <script src="plugin/highlight/highlight.js"></script>
     <script>
-      // Also available as an ES module, see:
-      // https://revealjs.com/initialization/
       Reveal.initialize({
+        keyboard: true,
+        overview: true,
         controls: true,
-        progress: true,
         center: true,
         hash: true,
+        progress: false,
 
-        // Learn about plugins: https://revealjs.com/plugins/
-        plugins: [
-          RevealZoom,
-          RevealNotes,
-          RevealSearch,
-          RevealMarkdown,
-          RevealHighlight,
-        ],
+        plugins: [RevealHighlight],
       });
     </script>
   </body>
