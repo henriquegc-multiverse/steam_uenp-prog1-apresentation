@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+
+    <title>reveal.js – The HTML Presentation Framework</title>
+
+    <meta
+      name="description"
+      content="A framework for easily creating beautiful presentations using HTML"
+    />
+    <meta name="author" content="Hakim El Hattab" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="dist/reset.css" />
+    <link rel="stylesheet" href="dist/reveal.css" />
+    <link rel="stylesheet" href="dist/theme/black.css" id="theme" />
+
+    <!-- syntax highlighting of code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css" />
+  </head>
+
+  <body>
+    <div class="reveal">
+      <div class="slides">
+        <section data-auto-animate>
+          <h2 data-id="code-title">Pretty Code</h2>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs javascript" data-trim data-line-numbers>
+						import React, { useState } from 'react';
+
+						function Example() {
+						  const [count, setCount] = useState(0);
+
+						  return (
+						    ...
+						  );
+						}
+					</code></pre>
+          <p>
+            Code syntax highlighting courtesy of
+            <a href="https://highlightjs.org/usage/">highlight.js</a>.
+          </p>
+        </section>
+
+        <section data-auto-animate>
+          <h2 data-id="code-title">With Animations</h2>
+          <pre
+            data-id="code-animation"
+          ><code class="hljs javascript" data-trim data-line-numbers="|4,8-11|17|22-24"><script type="text/template">
+						import React, { useState } from 'react';
+
+						function Example() {
+						  const [count, setCount] = useState(0);
+
+						  return (
+						    <div>
+						      <p>You clicked {count} times</p>
+						      <button onClick={() => setCount(count + 1)}>
+						        Click me
+						      </button>
+						    </div>
+						  );
+						}
+
+						function SecondExample() {
+						  const [count, setCount] = useState(0);
+
+						  return (
+						    <div>
+						      <p>You clicked {count} times</p>
+						      <button onClick={() => setCount(count + 1)}>
+						        Click me
+						      </button>
+						    </div>
+						  );
+						}
+					</script></code></pre>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/zoom/zoom.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/search/search.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // Also available as an ES module, see:
+      // https://revealjs.com/initialization/
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [
+          RevealZoom,
+          RevealNotes,
+          RevealSearch,
+          RevealMarkdown,
+          RevealHighlight,
+        ],
+      });
+    </script>
+  </body>
+</html>
